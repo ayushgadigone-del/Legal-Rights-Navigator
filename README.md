@@ -2,11 +2,29 @@
 
 > **SDG 16 LegalTech MVP** — Converting a citizen's plain-language grievance into a statute-cited, law-clinic-verified legal notice, with a settlement portal for the opposing party.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?logo=github)](https://ayushgadigone-del.github.io/legal-rights-navigator/)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green?logo=fastapi)](https://fastapi.tiangolo.com)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org)
+[![Deploy](https://img.shields.io/github/actions/workflow/status/ayushgadigone-del/legal-rights-navigator/deploy-frontend.yml?label=Deploy&logo=github-actions)](https://github.com/ayushgadigone-del/legal-rights-navigator/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 [![Tests](https://img.shields.io/badge/Tests-108%20passing-brightgreen)](#running-tests)
+
+---
+
+## 🌐 Try It Now — No Installation Required
+
+**The frontend is live on GitHub Pages:**
+
+| Role | Link |
+|---|---|
+| 🏠 Landing page | **[ayushgadigone-del.github.io/legal-rights-navigator/](https://ayushgadigone-del.github.io/legal-rights-navigator/)** |
+| 🎙️ Citizen Intake Wizard | [/citizen](https://ayushgadigone-del.github.io/legal-rights-navigator/citizen) |
+| ⚖️ Law Clinic Review Queue | [/clinic](https://ayushgadigone-del.github.io/legal-rights-navigator/clinic) |
+| 🤝 Settlement Portal | [/settlement/demo](https://ayushgadigone-del.github.io/legal-rights-navigator/settlement/demo) |
+| 📊 SDG Metrics Dashboard | [/dashboard](https://ayushgadigone-del.github.io/legal-rights-navigator/dashboard) |
+
+> **Click any of the three sample case buttons** on the Citizen page to see a full end-to-end demo — statute-cited legal notice generated entirely in the browser with no backend.
 
 ---
 
@@ -17,9 +35,11 @@
 - [Repository Structure](#repository-structure)
 - [Key Features](#key-features)
 - [Quick Start](#quick-start)
+  - [Open in Browser (No Install)](#open-in-browser-no-install)
+  - [Run Locally (One Click)](#run-locally-one-click)
   - [Backend](#backend)
   - [MCP Statute Server](#mcp-statute-server)
-  - [Frontend](#frontend)
+  - [Full Stack Dev](#full-stack-dev)
 - [API Reference](#api-reference)
 - [Environment Variables](#environment-variables)
 - [Running Tests](#running-tests)
@@ -40,19 +60,22 @@
 5. Generates a tamper-evident PDF with a SHA-256 hash
 6. Provides the opposing party with a JWT-signed **Settlement Portal** URL
 
+The frontend works **fully offline in demo mode** — no backend or API key needed to explore the full citizen journey.
+
 ---
 
 ## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     Next.js Frontend                        │
+│               Next.js Frontend (GitHub Pages)               │
 │  ┌──────────────┐  ┌──────────────────┐  ┌──────────────┐  │
 │  │ Citizen      │  │ Law Clinic       │  │ Settlement   │  │
 │  │ Intake Wizard│  │ Review Queue     │  │ Portal       │  │
 │  └──────┬───────┘  └────────┬─────────┘  └──────┬───────┘  │
 └─────────│───────────────────│────────────────────│──────────┘
-          │  HTTP (REST)       │                    │
+          │  HTTP (REST)  [optional — demo mode    │
+          │  when backend not running works offline]│
 ┌─────────▼───────────────────▼────────────────────▼──────────┐
 │                    FastAPI Backend                           │
 │  POST /api/intake/message    PATCH /api/clinic/verify/{id}  │
@@ -86,6 +109,10 @@
 legal-rights-navigator/
 ├── SPEC.md                          ← Full implementation specification
 ├── README.md                        ← This file
+├── Start Frontend.bat               ← Double-click launcher (Windows, no terminal)
+├── .github/
+│   └── workflows/
+│       └── deploy-frontend.yml      ← Auto-deploy to GitHub Pages on push
 │
 ├── backend/                         ← Python FastAPI service
 │   ├── pyproject.toml
@@ -134,9 +161,10 @@ legal-rights-navigator/
 │       └── test_server_tools.py     ← 20 MCP tool interface tests
 │
 └── frontend/                        ← Next.js 14 App Router + Tailwind CSS
+    ├── next.config.js               ← Static export config for GitHub Pages
     ├── src/app/
     │   ├── page.tsx                 ← Landing: 4 role cards
-    │   ├── citizen/page.tsx         ← Voice intake + Hindi/English toggle
+    │   ├── citizen/page.tsx         ← Voice intake + offline demo mode
     │   ├── clinic/page.tsx          ← Split-screen editor + statute badges
     │   ├── settlement/demo/page.tsx ← 7-day countdown + 4-option resolution
     │   └── dashboard/page.tsx       ← SDG metrics + unit economics
@@ -153,26 +181,42 @@ legal-rights-navigator/
 
 | Feature | Detail |
 |---|---|
-| **Voice + Text Intake** | Web Speech API with Hindi/English toggle; 3 sample case templates |
-| **Conversational Fact Extraction** | Regex-based NLP extracts dates, amounts, names from free text |
-| **Anti-Hallucination Citations** | MCP server returns verbatim statute text; LLM fills prose only |
-| **Statute Coverage** | Consumer Protection Act 2019 · Payment of Wages Act 1936 · Industrial Relations Code 2020 · Model Tenancy Act 2021 |
-| **PII Masking** | Phone · Aadhaar · PAN · Bank account · UPI · Email masked before LLM transit; re-hydrated only for PDF |
-| **Law Clinic Review** | JWT-authenticated PATCH endpoint; split-screen editor in UI |
-| **Tamper-Evident PDF** | SHA-256 hash embedded in document footer |
-| **Settlement Portal** | JWT-signed URL (30-day expiry) for opposing party response |
-| **RBAC** | PBKDF2-HMAC-SHA256 passwords + 8-hour JWT access tokens |
-| **Zero-Cost Local LLM** | Ollama + Mistral 7B by default; OpenAI GPT-4o mini via `LLM_PROVIDER=openai` |
+| **🌐 Live on GitHub Pages** | No installation — open the URL and explore immediately |
+| **🔌 Offline Demo Mode** | Citizen intake runs fully in-browser with pre-built statute-cited notices |
+| **🎙️ Voice + Text Intake** | Web Speech API with Hindi/English toggle; 3 sample case templates |
+| **🧠 Anti-Hallucination Citations** | MCP server returns verbatim statute text; LLM fills prose only |
+| **📚 Statute Coverage** | Consumer Protection Act 2019 · Payment of Wages Act 1936 · Industrial Relations Code 2020 · Model Tenancy Act 2021 |
+| **🔒 PII Masking** | Phone · Aadhaar · PAN · Bank account · UPI · Email masked before LLM transit |
+| **⚖️ Law Clinic Review** | JWT-authenticated PATCH endpoint; split-screen editor in UI |
+| **📄 Tamper-Evident PDF** | SHA-256 hash embedded in document footer |
+| **🤝 Settlement Portal** | JWT-signed URL (30-day expiry) for opposing party response |
+| **🔑 RBAC** | PBKDF2-HMAC-SHA256 passwords + 8-hour JWT access tokens |
+| **🤖 Zero-Cost Local LLM** | Ollama + Mistral 7B by default; OpenAI GPT-4o mini via `LLM_PROVIDER=openai` |
+| **🚀 Auto-Deploy** | GitHub Actions deploys frontend to Pages on every push to `main` |
 
 ---
 
 ## Quick Start
 
-### Prerequisites
+### Open in Browser (No Install)
 
-- Python 3.11+
-- Node.js 18+
-- [Ollama](https://ollama.ai) (optional — backend falls back gracefully if not running)
+Just click: **[https://ayushgadigone-del.github.io/legal-rights-navigator/](https://ayushgadigone-del.github.io/legal-rights-navigator/)**
+
+On the Citizen page, click any sample case button — the full intake → notice → review flow runs offline in your browser with no backend needed.
+
+---
+
+### Run Locally (One Click)
+
+**Windows:** Double-click **`Start Frontend.bat`** in the project folder.
+
+It will:
+1. Check Node.js is installed
+2. Auto-install `node_modules` on first run (takes ~30 seconds)
+3. Start the Next.js dev server
+4. Open **http://localhost:3000** in your browser automatically
+
+No terminal, no commands.
 
 ---
 
@@ -221,23 +265,19 @@ The server exposes two MCP tools:
 
 ---
 
-### Frontend
+### Full Stack Dev
+
+With both backend and frontend running, the citizen intake connects to the real FastAPI backend for live LLM-powered notice generation:
 
 ```bash
-cd frontend
-npm install
-npm run dev
-# → http://localhost:3000
+# Terminal 1 — backend
+cd backend && uvicorn app.main:app --reload --port 8000
+
+# Terminal 2 — frontend (or just double-click Start Frontend.bat)
+cd frontend && npm run dev
 ```
 
-**Role views available at:**
-
-| URL | Role |
-|---|---|
-| `http://localhost:3000/citizen` | Citizen Intake Wizard |
-| `http://localhost:3000/clinic` | Law Clinic Review Queue |
-| `http://localhost:3000/settlement/demo` | Settlement Resolution Page |
-| `http://localhost:3000/dashboard` | SDG Metrics Dashboard |
+The frontend auto-detects whether the backend is reachable. If it isn't, it falls back to offline demo mode automatically.
 
 ---
 
@@ -266,8 +306,8 @@ npm run dev
 curl -X POST http://localhost:8000/api/intake/message \
   -H "Content-Type: application/json" \
   -d '{
-    "session_id": "",
-    "message": "QuickMart sold me a broken mixer for ₹4,500. They refused to refund.",
+    "message": "QuickMart sold me a broken mixer for Rs 4500. They refused to refund.",
+    "dispute_category": "consumer_fraud",
     "language": "en"
   }'
 ```
@@ -288,6 +328,7 @@ curl -X POST http://localhost:8000/api/intake/message \
 | `SETTLEMENT_SECRET_KEY` | _(required)_ | JWT signing key for settlement URLs |
 | `PDF_DIR` | `./pdfs` | Directory where approved PDFs are written |
 | `SETTLEMENT_BASE_URL` | `http://localhost:3000/settlement` | Base URL for settlement portal links |
+| `BASE_PATH` | _(empty)_ | Set to `/legal-rights-navigator` for GitHub Pages builds |
 
 ---
 
@@ -358,6 +399,7 @@ The `pii_store` dict lives only on the call stack — it is never written to the
 | Statute accuracy | 100% — zero hallucinated citations by design |
 | Languages | English + Hindi (intake wizard) |
 | Accessibility | Voice input via Web Speech API |
+| Deployment | Zero-install — live on GitHub Pages |
 
 ---
 
