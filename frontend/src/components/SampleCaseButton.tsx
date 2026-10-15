@@ -1,6 +1,6 @@
 "use client";
 
-interface SampleCase {
+export interface SampleCase {
   label: string;
   category: "unpaid_wages" | "consumer_fraud" | "security_deposit";
   messages: string[];

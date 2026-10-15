@@ -1,23 +1,17 @@
-// Dynamic route: /settlement/[settlementId]
-// Reads ?token= from the URL and renders the settlement page.
-// The demo route /settlement/demo is handled by settlement/demo/page.tsx first.
-"use client";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+// Server component — exports generateStaticParams for static export compatibility.
+// "use client" must NOT appear here.
 import SettlementDemoPage from "../demo/page";
+import { Suspense } from "react";
 
-function SettlementContent() {
-  const params = useSearchParams();
-  const token = params.get("token");
-  // For now, render the same demo UI regardless of token.
-  // In production: verify token with backend before showing notice.
-  return <SettlementDemoPage />;
+// Required for `output: "export"` — at least one path must be pre-rendered.
+export function generateStaticParams() {
+  return [{ settlementId: "demo" }];
 }
 
 export default function SettlementDynamicPage() {
   return (
     <Suspense fallback={<div className="p-8 text-center text-slate-400">Loading settlement…</div>}>
-      <SettlementContent />
+      <SettlementDemoPage />
     </Suspense>
   );
 }

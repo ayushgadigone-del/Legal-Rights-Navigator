@@ -6,11 +6,13 @@ interface Props {
   language: "en" | "hi";
 }
 
-// Web Speech API type augmentation (not in standard lib)
+// Web Speech API — not in standard TS lib, type as any
 declare global {
   interface Window {
-    SpeechRecognition: typeof SpeechRecognition;
-    webkitSpeechRecognition: typeof SpeechRecognition;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    SpeechRecognition: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    webkitSpeechRecognition: any;
   }
 }
 
@@ -18,7 +20,8 @@ export function VoiceRecorder({ onTranscript, language }: Props) {
   const [listening, setListening] = useState(false);
   const [interim, setInterim] = useState("");
   const [supported, setSupported] = useState(true);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
     const SpeechRecognition =
@@ -35,7 +38,8 @@ export function VoiceRecorder({ onTranscript, language }: Props) {
     rec.maxAlternatives = 1;
     rec.lang = language === "hi" ? "hi-IN" : "en-IN";
 
-    rec.onresult = (e: SpeechRecognitionEvent) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onresult = (e: any) => {
       let finalText = "";
       let interimText = "";
       for (let i = e.resultIndex; i < e.results.length; i++) {
