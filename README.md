@@ -18,7 +18,7 @@
 
 | Role | Link |
 |---|---|
-| 🏠 Landing page | **[ayushgadigone-del.github.io/legal-rights-navigator/](https://ayushgadigone-del.github.io/legal-rights-navigator/)** |
+| 🏠 Landing page | **[ayushgadigone-del.github.io/legal-rights-navigator/](https://ayushgadigone-del.github.io/Legal-Rights-Navigator/)** |
 | 🎙️ Citizen Intake Wizard | [/citizen](https://ayushgadigone-del.github.io/legal-rights-navigator/citizen) |
 | ⚖️ Law Clinic Review Queue | [/clinic](https://ayushgadigone-del.github.io/legal-rights-navigator/clinic) |
 | 🤝 Settlement Portal | [/settlement/demo](https://ayushgadigone-del.github.io/legal-rights-navigator/settlement/demo) |
