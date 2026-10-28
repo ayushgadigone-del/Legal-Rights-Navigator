@@ -39,7 +39,7 @@ jobs:
       - name: Build static export
         working-directory: frontend
         env:
-          BASE_PATH: /legal-rights-navigator
+          BASE_PATH: /Legal-Rights-Navigator
           NEXT_PUBLIC_API_URL: http://localhost:8000
         run: npm run build
 
