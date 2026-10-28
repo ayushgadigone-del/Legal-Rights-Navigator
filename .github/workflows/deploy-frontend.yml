@@ -43,6 +43,9 @@ jobs:
           NEXT_PUBLIC_API_URL: http://localhost:8000
         run: npm run build
 
+      - name: Add .nojekyll (prevents GitHub Pages from ignoring _next/ assets)
+        run: touch frontend/out/.nojekyll
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
