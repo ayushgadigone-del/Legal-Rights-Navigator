@@ -2,7 +2,7 @@
 
 > **SDG 16 LegalTech MVP** — Converting a citizen's plain-language grievance into a statute-cited, law-clinic-verified legal notice, with a settlement portal for the opposing party.
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?logo=github)](https://ayushgadigone-del.github.io/legal-rights-navigator/)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-blue?logo=github)](https://ayushgadigone-del.github.io/Legal-Rights-Navigator/)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue?logo=python)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green?logo=fastapi)](https://fastapi.tiangolo.com)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org)
