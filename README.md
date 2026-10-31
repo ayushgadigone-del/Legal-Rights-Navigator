@@ -200,7 +200,7 @@ legal-rights-navigator/
 
 ### Open in Browser (No Install)
 
-Just click: **[https://ayushgadigone-del.github.io/legal-rights-navigator/](https://ayushgadigone-del.github.io/legal-rights-navigator/)**
+Just click: **[https://ayushgadigone-del.github.io/legal-rights-navigator/](https://ayushgadigone-del.github.io/Legal-Rights-Navigator/)**
 
 On the Citizen page, click any sample case button — the full intake → notice → review flow runs offline in your browser with no backend needed.
 
@@ -214,7 +214,7 @@ It will:
 1. Check Node.js is installed
 2. Auto-install `node_modules` on first run (takes ~30 seconds)
 3. Start the Next.js dev server
-4. Open **http://localhost:3000** in your browser automatically
+4. Open **http://localhost:8000** in your browser automatically
 
 No terminal, no commands.
 
