@@ -4,6 +4,7 @@ import { VoiceRecorder } from "@/components/VoiceRecorder";
 import { SampleCaseButton, SAMPLE_CASES, SampleCase } from "@/components/SampleCaseButton";
 import { api } from "@/lib/api";
 import type { CaseStatus, DisputeCategory, IntakeResponse } from "@/lib/types";
+import { useAuth } from "@/lib/auth-context";
 
 type Lang = "en" | "hi";
 
@@ -146,6 +147,7 @@ function ProgressBar({ status }: { status: CaseStatus }) {
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function CitizenPage() {
+  const { addActivity } = useAuth();
   const [lang, setLang] = useState<Lang>("en");
   const [category, setCategory] = useState<DisputeCategory | "">("");
   const [text, setText] = useState("");
@@ -171,12 +173,13 @@ export default function CitizenPage() {
   // ── Load a sample case (works fully offline) ───────────────────────────────
   const handleSample = useCallback((sample: SampleCase) => {
     const cat = sample.category as DisputeCategory;
+    const newCaseId = "demo-" + Math.random().toString(36).slice(2, 8);
     setDemoMode(true);
     setDemoCategory(cat);
     setCategory(cat);
     setDemoStep(0);
     setMessages([]);
-    setCaseId("demo-" + Math.random().toString(36).slice(2, 8));
+    setCaseId(newCaseId);
     setStatus("intake_in_progress");
     setFollowUp(null);
     setMissing([]);
@@ -185,6 +188,16 @@ export default function CitizenPage() {
     setPlainGuide(null);
     setText(sample.messages[0]);
 
+    // Record intake-started activity
+    addActivity({
+      id: crypto.randomUUID(),
+      type: "intake_started",
+      timestamp: new Date().toISOString(),
+      caseId: newCaseId,
+      category: cat,
+      summary: `Started intake for ${CATEGORY_LABELS[cat]} (demo mode)`,
+    });
+
     // Greet with first follow-up question
     const questions = DEMO_QUESTIONS[cat] ?? [];
     setTimeout(() => {
@@ -192,7 +205,7 @@ export default function CitizenPage() {
         { role: "bot", text: `👋 I'll help you draft a legal notice for your ${CATEGORY_LABELS[cat]} dispute. ${questions[0] ?? "Please describe what happened."}` },
       ]);
     }, 400);
-  }, []);
+  }, [addActivity]);
 
   // ── Demo send (offline simulation) ────────────────────────────────────────
   const sendDemoMessage = useCallback(() => {
@@ -227,6 +240,15 @@ export default function CitizenPage() {
           { role: "bot", text: `📄 Legal notice drafted!\n\n${DEMO_NOTICE[cat] ?? ""}` },
           { role: "bot", text: `✅ Notice ID: ${fakeNoticeId.slice(0, 12)}… — queued for law clinic review.` },
         ]);
+        // Record notice-generated activity
+        addActivity({
+          id: crypto.randomUUID(),
+          type: "notice_generated",
+          timestamp: new Date().toISOString(),
+          noticeId: fakeNoticeId,
+          category: cat,
+          summary: `Legal notice generated for ${CATEGORY_LABELS[cat]} dispute (demo)`,
+        });
       }
     }, 900);
   }, [text, demoStep, demoCategory]);
@@ -269,6 +291,16 @@ export default function CitizenPage() {
           role: "bot",
           text: `✅ Legal notice drafted! Notice ID: ${notice.notice_id.slice(0, 8)}…`,
         }]);
+        // Record notice-generated activity
+        addActivity({
+          id: crypto.randomUUID(),
+          type: "notice_generated",
+          timestamp: new Date().toISOString(),
+          caseId: res.case_id,
+          noticeId: notice.notice_id,
+          category: category as DisputeCategory,
+          summary: `Legal notice generated for ${category ? CATEGORY_LABELS[category as DisputeCategory] : "dispute"}`,
+        });
       }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : "Something went wrong");

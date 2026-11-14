@@ -1,5 +1,24 @@
 // Shared TypeScript types mirroring backend Pydantic models
 
+// ── User Activity ─────────────────────────────────────────────────────────────
+
+export type ActivityType =
+  | "notice_generated"
+  | "intake_started"
+  | "clinic_reviewed"
+  | "settlement_viewed";
+
+export interface ActivityEntry {
+  id: string;                  // unique per entry
+  type: ActivityType;
+  timestamp: string;           // ISO 8601
+  caseId?: string;
+  noticeId?: string;
+  category?: DisputeCategory;
+  summary: string;             // one-line human-readable description
+  metadata?: Record<string, unknown>;
+}
+
 export type DisputeCategory = "unpaid_wages" | "consumer_fraud" | "security_deposit";
 
 export type CaseStatus =
